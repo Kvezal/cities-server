@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  input:
+    image: kvezal/cities-server:latest
+    container_name: input
+    ports:
+      - 80:80
+    depends_on:
+      - frontend
+      - api
+    networks:
+      - six-cities
+  frontend:
+    image: kvezal/cities-angular:latest
+    container_name: frontend
+    env_file: environments/frontend.env
+    networks:
+      - six-cities
+  postgres:
+    image: kvezal/cities-postgres:latest
+    container_name: postgres
+    env_file: environments/postgres.env
+    networks:
+      - six-cities
+    stdin_open: true
+    tty: true
+  api:
+    image: kvezal/cities-api:latest
+    container_name: api
+    env_file: environments/api.env
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
+    networks:
+      - six-cities
+    entrypoint: /app/scripts/api.sh fake
+    stdin_open: true
+    tty: true
+networks:
+  six-cities:

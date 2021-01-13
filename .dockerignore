@@ -1,0 +1,7 @@
+Dockerfile
+docker-compose.*
+.env
+README.md
+scripts
+*.pem
+.idea
